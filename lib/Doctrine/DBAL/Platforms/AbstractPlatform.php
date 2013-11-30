@@ -47,15 +47,15 @@ use Doctrine\DBAL\DBALException,
  * point of abstraction of platform-specific behaviors, features and SQL dialects.
  * They are a passive source of information.
  *
- *
- * @link    www.doctrine-project.org
- * @since   2.0
- * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author  Jonathan Wage <jonwage@gmail.com>
- * @author  Roman Borschel <roman@code-factory.org>
- * @author  Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
- * @author  Benjamin Eberlei <kontakt@beberlei.de>
- * @todo Remove any unnecessary methods.
+ * @link   www.doctrine-project.org
+ * @since  2.0
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author Jonathan Wage <jonwage@gmail.com>
+ * @author Roman Borschel <roman@code-factory.org>
+ * @author Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
+ * @author Benjamin Eberlei <kontakt@beberlei.de>
+ * @author Kévin Dunglas <dunglas@gmail.com>
+ * @todo   Remove any unnecessary methods.
  */
 abstract class AbstractPlatform
 {
@@ -2513,7 +2513,23 @@ abstract class AbstractPlatform
     }
 
     /**
+<<<<<<< HEAD
      * Does this platform supports onUpdate in foreign key constraints?
+=======
+     * Whether the platform supports foreign key constraints between given tables.
+     *
+     * @param \Doctrine\DBAL\Schema\Table $localTable
+     * @param \Doctrine\DBAL\Schema\Table $referencedTable
+     * @return boolean
+     */
+    public function supportsForeignKeyConstraintBetween(Table $localTable, Table $referencedTable)
+    {
+        return $this->supportsForeignKeyConstraints();
+    }
+
+    /**
+     * Whether this platform supports onUpdate in foreign key constraints.
+>>>>>>> 33c9b84... Don't generate foreign keys for MySQL tables that are not InnoDB
      *
      * @return boolean
      */

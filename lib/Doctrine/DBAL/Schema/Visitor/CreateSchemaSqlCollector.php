@@ -30,7 +30,10 @@ use Doctrine\DBAL\Platforms\AbstractPlatform,
     Doctrine\DBAL\Schema\Sequence,
     Doctrine\DBAL\Schema\Index;
 
-class CreateSchemaSqlCollector implements Visitor
+/**
+ * @author Kévin Dunglas <dunglas@gmail.com>
+ */
+class CreateSchemaSqlCollector extends AbstractVisitor
 {
     /**
      * @var array
@@ -90,17 +93,22 @@ class CreateSchemaSqlCollector implements Visitor
     }
 
     /**
-     * @param Table $localTable
-     * @param ForeignKeyConstraint $fkConstraint
+     * {@inheritdoc}
      */
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {
         $namespace = $this->getNamespace($localTable);
 
-        if ($this->_platform->supportsForeignKeyConstraints()) {
-            $this->_createFkConstraintQueries[$namespace] = array_merge(
-                $this->_createFkConstraintQueries[$namespace],
-                (array) $this->_platform->getCreateForeignKeySQL(
+        if ($fkConstraint->getForeignTable() instanceof Table) {
+            $supportsForeignKeys = $this->platform->supportsForeignKeyConstraintBetween($localTable, $fkConstraint->getForeignTable());
+        } else {
+            $supportsForeignKeys = $this->platform->supportsForeignKeyConstraints();
+        }
+
+        if ($supportsForeignKeys) {
+            $this->createFkConstraintQueries[$namespace] = array_merge(
+                $this->createFkConstraintQueries[$namespace],
+                (array) $this->platform->getCreateForeignKeySQL(
                     $fkConstraint, $localTable
                 )
             );

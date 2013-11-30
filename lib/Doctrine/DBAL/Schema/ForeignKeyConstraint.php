@@ -24,6 +24,15 @@ namespace Doctrine\DBAL\Schema;
 use Doctrine\DBAL\Schema\Visitor\Visitor;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
+/**
+ * An abstraction class for a foreign key constraint.
+ *
+ * @author Benjamin Eberlei <kontakt@beberlei.de>
+ * @author Steve Müller <st.mueller@dzh-online.de>
+ * @author Kévin Dunglas <dunglas@gmail.com>
+ * @link   www.doctrine-project.org
+ * @since  2.0
+ */
 class ForeignKeyConstraint extends AbstractAsset implements Constraint
 {
     /**
@@ -112,6 +121,17 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
 
     /**
      * Return the non-schema qualified foreign table name.
+     * the foreign key constraint is associated with.
+     *
+     * @return Table|Identifier
+     */
+    public function getForeignTable()
+    {
+        return $this->_foreignTableName;
+    }
+
+    /**
+     * Returns the non-schema qualified foreign table name.
      *
      * @return string
      */
